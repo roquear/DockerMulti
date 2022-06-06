@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+
+<plugin>
+
+    <extension-point id="io.cloudbeaver.userProfile" name="User profiles" schema="schema/io.cloudbeaver.userProfile.exsd"/>
+
+    <extension point="io.cloudbeaver.service">
+        <service id="auth" label="User authentication" description="User authentication services" class="io.cloudbeaver.service.auth.WebServiceBindingAuth">
+
+        </service>
+    </extension>
+
+    <extension point="io.cloudbeaver.userProfile">
+        <userProfileProperties>
+            <propertyGroup label="Main">
+                <property id="firstName" label="First Name" type="string" description="User first name"/>
+                <property id="lastName" label="Last Name" type="string" description="User last name"/>
+            </propertyGroup>
+        </userProfileProperties>
+    </extension>
+    <extension point="io.cloudbeaver.handler">
+        <sessionHandler id="RPSessionHandler" class="io.cloudbeaver.service.auth.RPSessionHandler"/>
+    </extension>
+    <extension point="io.cloudbeaver.handler">
+        <servletHandler id="LocalServletHandler" class="io.cloudbeaver.service.auth.local.LocalServletHandler"/>
+        <sessionHandler id="LocalSessionHandler" class="io.cloudbeaver.service.auth.local.LocalSessionHandler"/>
+    </extension>
+
+</plugin>

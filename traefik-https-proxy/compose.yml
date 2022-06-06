@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+    proxy:
+        image: silintl/traefik-https-proxy
+        container_name: traefik-proxy_
+        ports:
+          - "80:80"
+          - "443:443"
+        volumes:
+          - ./traefik.toml:/etc/traefik/traefik.toml
+          - ./cert/:/cert/
+        env_file:
+          - ./local.env
+
+
+          

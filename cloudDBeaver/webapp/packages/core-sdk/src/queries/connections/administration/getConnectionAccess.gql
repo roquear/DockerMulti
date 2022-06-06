@@ -1,0 +1,8 @@
+query getConnectionAccess($connectionId: ID) {
+  subjects: getConnectionSubjectAccess(connectionId: $connectionId) {
+    connectionId
+    dataSourceId
+    subjectId
+    subjectType
+  } 
+}

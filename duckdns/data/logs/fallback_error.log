@@ -1,0 +1,32 @@
+2022/04/15 10:55:29 [warn] 384#384: 1024 worker_connections are not enough, reusing connections
+2022/04/15 10:55:29 [alert] 384#384: 1024 worker_connections are not enough
+2022/04/15 10:55:29 [error] 385#385: *2038 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:80/favicon.ico", host: "localhost", referrer: "http://localhost:8080/"
+2022/06/01 17:58:17 [alert] 306#306: 1024 worker_connections are not enough
+2022/06/01 17:58:17 [error] 307#307: *2077 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:80/favicon.ico", host: "localhost", referrer: "http://localhost:8080/"
+2022/06/02 06:37:07 [alert] 309#309: 1024 worker_connections are not enough
+2022/06/02 06:37:07 [error] 310#310: *1948 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:80/favicon.ico", host: "92.176.54.242", referrer: "http://92.176.54.242:8080/"
+2022/06/02 06:37:40 [error] 309#309: *1950 open() "/var/www/html/editBlackAndWhiteList" failed (2: No such file or directory), client: 192.145.213.215, server: localhost-nginx-proxy-manager, request: "POST /editBlackAndWhiteList HTTP/1.1", host: "92.176.54.242:88"
+2022/06/02 07:14:18 [error] 309#309: *1952 open() "/var/www/html/api" failed (2: No such file or directory), client: 172.19.0.1, server: localhost-nginx-proxy-manager, request: "GET /api?timeout=32s HTTP/1.1", host: "localhost:8080"
+2022/06/02 07:14:18 [error] 309#309: *1952 open() "/var/www/html/apis" failed (2: No such file or directory), client: 172.19.0.1, server: localhost-nginx-proxy-manager, request: "GET /apis?timeout=32s HTTP/1.1", host: "localhost:8080"
+2022/06/02 18:58:12 [error] 540#540: *1953 open() "/var/www/html/api" failed (2: No such file or directory), client: 172.19.0.1, server: localhost-nginx-proxy-manager, request: "GET /api?timeout=32s HTTP/1.1", host: "localhost:8080"
+2022/06/02 18:58:12 [error] 540#540: *1953 open() "/var/www/html/apis" failed (2: No such file or directory), client: 172.19.0.1, server: localhost-nginx-proxy-manager, request: "GET /apis?timeout=32s HTTP/1.1", host: "localhost:8080"
+2022/06/03 05:47:34 [error] 308#308: *1 open() "/var/www/html/api/gql" failed (2: No such file or directory), client: 192.168.1.1, server: localhost-nginx-proxy-manager, request: "POST /api/gql HTTP/1.1", host: "92.176.54.242:8080", referrer: "http://92.176.54.242:8080/"
+2022/06/03 05:47:35 [error] 310#310: *2 open() "/var/www/html/api/gql" failed (2: No such file or directory), client: 192.168.1.1, server: localhost-nginx-proxy-manager, request: "POST /api/gql HTTP/1.1", host: "92.176.54.242:8080", referrer: "http://92.176.54.242:8080/"
+2022/06/03 05:47:35 [warn] 310#310: 1024 worker_connections are not enough, reusing connections
+2022/06/03 05:47:35 [alert] 310#310: 1024 worker_connections are not enough
+2022/06/03 05:47:35 [error] 308#308: *2036 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /icons/error_icon.svg HTTP/1.1", upstream: "http://127.0.0.1:80/icons/error_icon.svg", host: "92.176.54.242", referrer: "http://92.176.54.242:8080/"
+2022/06/03 05:52:34 [error] 310#310: *2038 open() "/var/www/html/editBlackAndWhiteList" failed (2: No such file or directory), client: 83.51.216.103, server: localhost-nginx-proxy-manager, request: "POST /editBlackAndWhiteList HTTP/1.1", host: "92.176.54.242:82"
+2022/06/03 05:52:49 [warn] 310#310: 1024 worker_connections are not enough, reusing connections
+2022/06/03 05:52:49 [alert] 310#310: 1024 worker_connections are not enough
+2022/06/03 05:52:49 [error] 308#308: *4056 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:80/favicon.ico", host: "92.176.54.242", referrer: "http://92.176.54.242:8080/"
+2022/06/03 09:36:50 [warn] 309#309: 1024 worker_connections are not enough, reusing connections
+2022/06/03 09:36:50 [alert] 309#309: 1024 worker_connections are not enough
+2022/06/03 09:36:50 [error] 310#310: *2204 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:80/favicon.ico", host: "92.176.54.242", referrer: "http://92.176.54.242:8080/"
+2022/06/03 10:35:40 [alert] 327#327: 1024 worker_connections are not enough
+2022/06/03 10:35:40 [error] 328#328: *4212 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:80/favicon.ico", host: "92.176.54.242", referrer: "http://92.176.54.242:8080/"
+2022/06/03 11:28:47 [warn] 328#328: 1024 worker_connections are not enough, reusing connections
+2022/06/03 11:28:47 [alert] 327#327: 1024 worker_connections are not enough
+2022/06/03 11:28:47 [error] 328#328: *6219 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:80/favicon.ico", host: "rokedegea.tplinkdns.com", referrer: "http://rokedegea.tplinkdns.com:8080/"
+2022/06/03 11:37:21 [warn] 344#344: 1024 worker_connections are not enough, reusing connections
+2022/06/03 11:37:21 [alert] 344#344: 1024 worker_connections are not enough
+2022/06/03 11:37:21 [error] 345#345: *8260 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:80/favicon.ico", host: "92.176.54.242", referrer: "http://92.176.54.242:8080/"

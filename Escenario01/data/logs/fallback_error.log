@@ -1,0 +1,1 @@
+2022/06/05 11:49:35 [error] 280#280: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.32.1, server: nginxproxymanager, request: "GET /api/ HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "rokedegea.duckdns.org:81", referrer: "http://rokedegea.duckdns.org:81/nginx/certificates"

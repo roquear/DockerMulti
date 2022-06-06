@@ -1,0 +1,437 @@
+version: "3"
+
+services:
+    mariadb:
+        image: wodby/mariadb:$MARIADB_TAG
+        container_name: "${PROJECT_NAME}_mariadb"
+        stop_grace_period: 30s
+
+        environment:
+            MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+            MYSQL_DATABASE: $DB_NAME
+            MYSQL_USER: $DB_USER
+            MYSQL_PASSWORD: $DB_PASSWORD
+        volumes:
+            - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql
+            ############### MODIFICAR
+            - ./db-data:/var/lib/mysql:rw
+
+    php:
+        image: wodby/drupal-php:$PHP_TAG #AQUI ESTAN TODOS LOS ARCHIVOS DE DRUPAL
+        #image: wodby/drupal-php:8.1-4.36.0
+        container_name: "${PROJECT_NAME}_php"
+        environment:
+            SSMTP_MAILHUB: mailhog:1025
+            #      SSMTP_MAILHUB: opensmtpd:25
+            PHP_SENDMAIL_PATH: '"/usr/bin/dos2unix -u | /usr/sbin/ssmtp -f -t"'
+#                  PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
+#      PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S opensmtpd:25
+        #      DB_HOST: $DB_HOST
+        #      DB_PORT: $DB_PORT
+        #      DB_USER: $DB_USER
+        #      DB_PASSWORD: $DB_PASSWORD
+        #      DB_NAME: $DB_NAME
+        #      DB_DRIVER: $DB_DRIVER
+        #      DRUSH_OPTIONS_URI: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
+        #      PHP_FPM_USER: wodby
+        #      PHP_FPM_GROUP: wodby
+        #      COLUMNS: 80 # Set 80 columns for docker exec -it.
+        #      # Read instructions at https://wodby.com/docs/stacks/php/local/#xdebug
+        #      PHP_XDEBUG: 1
+        #      PHP_XDEBUG_MODE: debug
+        #      PHP_IDE_CONFIG: serverName=my-ide
+        #      PHP_XDEBUG_IDEKEY: "my-ide"
+        #      PHP_XDEBUG_CLIENT_HOST: 172.17.0.1 # Linux
+        #      PHP_XDEBUG_CLIENT_HOST: host.docker.internal # Docker 18.03+ Mac/Win
+        #      PHP_XDEBUG_CLIENT_HOST: 10.0.75.1 # Windows, Docker < 18.03
+        #      PHP_XDEBUG_LOG: /tmp/php-xdebug.log
+        #      # PHPUnit Drupal testing configurations
+        #      SIMPLETEST_BASE_URL: "http://nginx"
+        #      SIMPLETEST_DB: "${DB_DRIVER}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}#tests_"
+        #      MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","goog:chromeOptions":{"args":["--disable-gpu","--headless"]}}, "http://chrome:9515"]'
+        volumes:
+            #- ./:/var/www/html:cached
+            ############### MODIFICAR
+            - ./drupal-data:/var/www/html:rw
+
+            ## For XHProf and Xdebug profiler traces  /// Utilice la extensión xhprof para analizar el rendimiento de proyectos PHP
+            #- files:/mnt/files
+
+    crond:
+        image: wodby/drupal-php:$PHP_TAG #AQUI TAMBIEN HAY ACCESO A LOS ARCHIVOS DE DRUPAL
+        container_name: "${PROJECT_NAME}_crond"
+        environment:
+            CRONTAB: "0 * * * * drush -r /var/www/html/web cron"
+        command: sudo -E LD_PRELOAD=/usr/lib/preloadable_libiconv.so crond -f -d 0
+        volumes:
+            #- ./:/var/www/html:cached
+    ############### MODIFICAR no funciona la siguiente linea
+            - ./drupal-data:/var/www/html:rw
+
+    nginx:
+        image: wodby/nginx:$NGINX_TAG #TAMBIEN EN ESTE CONTENEDOR SE ACCEDE A LOS ARCHIVOS DE DRUPAL /VAR/WWW/HTML
+        container_name: "${PROJECT_NAME}_nginx"
+        depends_on:
+            - php
+        environment:
+            NGINX_STATIC_OPEN_FILE_CACHE: "off"
+            NGINX_ERROR_LOG_LEVEL: debug
+            NGINX_BACKEND_HOST: php
+            NGINX_SERVER_ROOT: /var/www/html/web
+            NGINX_VHOST_PRESET: $NGINX_VHOST_PRESET
+            VIRTUAL_HOST: humanidadlibre.org
+            DRUPAL_TRUSTED_HOST_PATTERNS: humanidadlibre.org
+            #NGINX_SET_REAL_IPS_FROM: "[\"82.223.165.50\", \"192.168.0.99\"]"
+            NGINX_DRUPAL_FILE_PROXY_URL: http://humanidadlibre.org
+        volumes:
+            #- ./:/var/www/html:cached
+            ############### MODIFICAR
+            - ./drupal-data:/var/www/html:rw
+            - /certs:/certs/
+            - /var/log:/var/log/nginx
+            - /etc/letsencrypt:/etc/letsencrypt
+            - ./conf.d:/etc/nginx/conf.d:rw
+
+        labels:
+            - "traefik.http.routers.${PROJECT_NAME}_nginx.entrypoints=web"   # 3new
+            - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
+            - "traefik.http.routers.${PROJECT_NAME}_nginx_lan.rule=Host(`humanidadlibre.org`)"
+#            - "traefik.http.middlewares.${PROJECT_NAME}_https_nginx.redirectscheme.scheme=https"    # 3new
+
+#            - "traefik.http.routers.${PROJECT_NAME}_https_nginx.entrypoints=web-secure"        # 3new
+#            - "traefik.http.routers.${PROJECT_NAME}_https_nginx.tls=true"      # 3new
+            - "traefik.http.routers.${PROJECT_NAME}_nginx.tls.certresolver=le"   #4new
+            - "traefik.http.routers.${PROJECT_NAME}_nginx.entrypoints=websecure"     #4new
+
+    certbot:
+        container_name: "${PROJECT_NAME}_cerbot"
+        image: certbot/certbot
+        volumes:
+            - /etc/letsencrypt:/etc/letsencrypt
+#          - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+    mailhog:
+        image: mailhog/mailhog
+        container_name: "${PROJECT_NAME}_mailhog"
+        labels:
+            - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
+            - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
+
+    # Gestor de contenedores via interfaz web
+    portainer:
+        image: portainer/portainer-ce
+        container_name: "${PROJECT_NAME}_portainer"
+
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock"
+            - ./portainer-data:/data:rw
+        ports:
+            - "5000:9000"
+#        networks:
+#            - portainer-net
+    #restart: always
+
+
+
+    #  postgres:
+    #    image: wodby/postgres:$POSTGRES_TAG
+    #    container_name: "${PROJECT_NAME}_postgres"
+    #    stop_grace_period: 30s
+    #    environment:
+    #      POSTGRES_PASSWORD: $DB_PASSWORD
+    #      POSTGRES_DB: $DB_NAME
+    #      POSTGRES_USER: $DB_USER
+    #      POSTGRES_DB_EXTENSIONS: pg_trgm
+    #    volumes:
+    #    - ./postgres-init:/docker-entrypoint-initdb.d # Place init file(s) here.
+    #    - /path/to/postgres/data/on/host:/var/lib/postgresql/data # Use bind mount
+
+    #  apache:
+    #    image: wodby/apache:$APACHE_TAG
+    #    container_name: "${PROJECT_NAME}_apache"
+    #    depends_on:
+    #    - php
+    #    environment:
+    #      APACHE_LOG_LEVEL: debug
+    #      APACHE_BACKEND_HOST: php
+    #      APACHE_VHOST_PRESET: php
+    #      APACHE_DOCUMENT_ROOT: /var/www/html/web
+    #    volumes:
+    #    - ./:/var/www/html:cached
+
+    #    labels:
+    #    - "traefik.http.routers.${PROJECT_NAME}_apache.rule=Host(`${PROJECT_BASE_URL}`)"
+
+    varnish:        # mejora la velocidad de carga de la pagina web
+        image: wodby/varnish:$VARNISH_TAG
+        container_name: "${PROJECT_NAME}_varnish"
+        depends_on:
+        - nginx
+        environment:
+            VARNISH_SECRET: secret
+            VARNISH_BACKEND_HOST: nginx
+            VARNISH_BACKEND_PORT: 80
+            VARNISH_CONFIG_PRESET: drupal
+            VARNISH_ALLOW_UNRESTRICTED_PURGE: 1
+        labels:
+        - "traefik.http.services.${PROJECT_NAME}_varnish.loadbalancer.server.port=6081"
+        - "traefik.http.routers.${PROJECT_NAME}_varnish.rule=Host(`varnish.${PROJECT_BASE_URL}`)"
+
+    #  redis:
+    #    container_name: "${PROJECT_NAME}_redis"
+    #    image: wodby/redis:$REDIS_TAG
+
+    adminer:
+        container_name: "${PROJECT_NAME}_adminer"
+        image: wodby/adminer:$ADMINER_TAG
+        environment:
+            # For PostgreSQL:
+            #      ADMINER_DEFAULT_DB_DRIVER: pgsql
+            ADMINER_DEFAULT_DB_HOST: $DB_HOST
+            ADMINER_DEFAULT_DB_NAME: $DB_NAME
+        labels:
+            - "traefik.http.routers.${PROJECT_NAME}_adminer.rule=Host(`adminer.${PROJECT_BASE_URL}`)"
+
+    #  pma:
+
+    #    container_name: "${PROJECT_NAME}_pma"
+    #    image: phpmyadmin/phpmyadmin
+    #    environment:
+    #      PMA_HOST: $DB_HOST
+    #      PMA_USER: $DB_USER
+    #      PMA_PASSWORD: $DB_PASSWORD
+    #      UPLOAD_LIMIT: 1G
+    #    labels:
+    #    - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
+
+    #  solr:
+    #    image: wodby/solr:$SOLR_TAG
+    #    container_name: "${PROJECT_NAME}_solr"
+    #    environment:
+    ##      SOLR_DEFAULT_CONFIG_SET: $SOLR_CONFIG_SET
+    #      ZK_HOST: zookeeper:2181
+    #      SOLR_HEAP: 1024m
+    #    depends_on:
+    #    - zookeeper
+    #    labels:
+    #    - "traefik.http.services.${PROJECT_NAME}_solr.loadbalancer.server.port=8983"
+    #    - "traefik.http.routers.${PROJECT_NAME}_solr.rule=Host(`solr.${PROJECT_BASE_URL}`)"
+
+
+    #  zookeeper:
+    #    image: zookeeper:$ZOOKEEPER_TAG
+    #    container_name: "${PROJECT_NAME}_zookeeper"
+    #    environment:
+    #      ZOO_MY_ID: 1
+    #      ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
+    #      ZOO_4LW_COMMANDS_WHITELIST: mntr, conf, ruok
+
+    drupal-node:
+        image: wodby/drupal-node:$DRUPAL_NODE_TAG
+        container_name: "${PROJECT_NAME}_drupal_nodejs"
+        labels:
+        - "traefik.http.routers.${PROJECT_NAME}_drupal_node.rule=Host(`drupal_node.${PROJECT_BASE_URL}`)"
+        environment:
+            NODE_SERVICE_KEY: node-service-key
+
+    memcached:
+        container_name: "${PROJECT_NAME}_memcached"
+        image: wodby/memcached:$MEMCACHED_TAG
+
+    #  rsyslog:
+    #    container_name: "${PROJECT_NAME}_rsyslog"
+    #    image: wodby/rsyslog:$RSYSLOG_TAG
+
+    #  athenapdf:
+    #    image: arachnysdocker/athenapdf-service:$ATHENAPDF_TAG
+    #    container_name: "${PROJECT_NAME}_athenapdf"
+    #    environment:
+    #      WEAVER_AUTH_KEY: weaver-auth-key
+    #      WEAVER_ATHENA_CMD: "athenapdf -S"
+    #      WEAVER_MAX_WORKERS: 10
+    #      WEAVER_MAX_CONVERSION_QUEUE: 50
+    #      WEAVER_WORKER_TIMEOUT: 90
+    #      WEAVER_CONVERSION_FALLBACK: "false"
+
+    #  node:
+    #    image: wodby/node:$NODE_TAG
+    #    container_name: "${PROJECT_NAME}_node"
+    #    working_dir: /var/www/html/path/to/theme/to/build
+    #    labels:
+    #    - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=3000"
+    #    - "traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`node.${PROJECT_BASE_URL}`)"
+    #    expose:
+    #    - "3000"
+    #    volumes:
+    #    - ./:/var/www/html
+    #    command: sh -c 'yarn install && yarn run start'
+
+
+
+    #  blackfire:
+    #    image: blackfire/blackfire
+    #    container_name: "${PROJECT_NAME}_blackfire"
+    #    environment:
+    #      BLACKFIRE_SERVER_ID: XXXXX
+    #      BLACKFIRE_SERVER_TOKEN: YYYYY
+
+    #  webgrind:
+    #    image: wodby/webgrind:$WEBGRIND_TAG
+    #    container_name: "${PROJECT_NAME}_webgrind"
+    #    environment:
+    #      WEBGRIND_PROFILER_DIR: /mnt/files/xdebug
+    #    labels:
+    #    - "traefik.http.routers.${PROJECT_NAME}_webgrind.rule=Host(`webgrind.${PROJECT_BASE_URL}`)"
+    #    volumes:
+    #    - files:/mnt/files
+
+    #  elasticsearch:
+    #    image: wodby/elasticsearch:$ELASTICSEARCH_TAG
+    #    container_name: "${PROJECT_NAME}_elasticsearch"
+    #    environment:
+    #      ES_JAVA_OPTS: "-Xms500m -Xmx500m"
+    #    ulimits:
+    #      memlock:
+    #        soft: -1
+    #        hard: -1
+
+    #  kibana:
+    #    image: wodby/kibana:$KIBANA_TAG
+    #    container_name: "${PROJECT_NAME}_kibana"
+    #    depends_on:
+    #    - elasticsearch
+    #    labels:
+    #    - "traefik.http.services.${PROJECT_NAME}_kibana.loadbalancer.server.port=5601"
+    #    - "traefik.http.routers.${PROJECT_NAME}_kibana.rule=Host(`kibana.${PROJECT_BASE_URL}`)"
+
+    #  opensmtpd:
+    #    container_name: "${PROJECT_NAME}_opensmtpd"
+    #    image: wodby/opensmtpd:$OPENSMTPD_TAG
+
+    #  xhprof:
+    #    image: wodby/xhprof:$XHPROF_TAG
+    #    container_name: "${PROJECT_NAME}_xhprof"
+    #    restart: always
+    #    volumes:
+    #    - files:/mnt/files
+    #    labels:
+    #    - "traefik.http.routers.${PROJECT_NAME}_xhprof.rule=Host(`xhprof.${PROJECT_BASE_URL}`)"
+
+    #  chrome:
+    #    image: selenium/standalone-chrome:$SELENIUM_CHROME_TAG
+    #    container_name: "${PROJECT_NAME}_chrome"
+    #    volumes:
+    #    - /dev/shm:/dev/shm
+    #    entrypoint:
+    #    - chromedriver
+    #    - "--no-sandbox"
+    #    - "--disable-dev-shm-usage"
+    #    - "--log-path=/tmp/chromedriver.log"
+    #    - "--verbose"
+    #    - "--whitelisted-ips="
+
+    traefik:
+        image: traefik:v2.0
+        container_name: "${PROJECT_NAME}_traefik"
+        command:
+            - --entrypoints.web.address=:80   #new
+            - --providers.docker           #new
+        # - --api.insecure=true --providers.docker  # estaba habilitado
+            - --api # renew
+            - --entrypoints.websecure.address=:443     # new no quitar
+            - --certificatesresolvers.le.acme.email=roque.ar@gmail.com  # new
+            - --certificatesresolvers.le.acme.storage=/acme.json # new
+            - --certificatesresolvers.le.acme.tlschallenge=true # new
+            - --configFile=./myconfigfile.toml    # 3new
+        ports:
+            - "${PROJECT_PORT}:80"
+            - '8080:8080' # Dashboard
+#            - '9443:9443'    # estaba habilitado
+            - '443:443'      # new
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            ################# MODIFICAR
+            - ./portainer-data:/data:rw
+            - /certs:/certs/    #new pero mio, de otra explicacion
+#            - ./acme/acme.json:/acme.json #renew
+#            - ./acme:/etc/traefik/acme
+            - /acme.storage=/acme.json  #22/05
+        labels:   # new
+            # middleware redirect  # new
+            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"    # new
+
+            # global redirect to https         # new
+            - "traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)"    # new
+            - "traefik.http.routers.redirs.entrypoints=web"        # new
+            - "traefik.http.routers.redirs.middlewares=redirect-to-https"      # new
+            # Dashboard   # renew
+#            - "traefik.http.routers.traefik.rule=Host(`humanidadlibre.org`)"      # renew
+#            - "traefik.http.routers.traefik.service=api@internal"          # renew
+#            - "traefik.http.routers.traefik.middlewares=admin"           # renew
+#            - "traefik.http.routers.traefik.tls.certresolver=le"                # renew
+#            - "traefik.http.routers.traefik.entrypoints=websecure"            # renew
+#            - "traefik.http.middlewares.admin.basicauth.users=admin:xxx"              # renew
+
+
+
+
+#    my-app:
+#      image: containous/whoami:v1.3.0
+#      container_name: "${PROJECT_NAME}_myapp"
+#          - --port=8082 # Our service listens on 8082 # CHEK1 se usa junto a CHEK2
+#      labels:
+#        - traefik.http.routers.my-app.rule=Host(`humanidadlibre.org`)
+#        - traefik.http.services.my-app.loadbalancer.server.port=8082   # CHEK 2 al escuchar en puerto especifico unido a CHEK 1
+#        - traefik.http.routers.my-app.middlewares=auth
+#        - traefik.http.routers.my-app.tls.certresolver=le
+#        - traefik.http.routers.my-app.entrypoints=websecure    #        - traefik.http.routers.my-app.entrypoints=web    #quiza sea asi
+
+#  my-svc:
+#    image: containous/whoami:v1.3.0
+#    labels:
+#      - traefik.http.routers.my-app.rule=Host(`example.com`)
+#      - traefik.http.routers.my-app.middlewares=auth
+#      - traefik.http.middlewares.auth.basicauth.users=test:xxx
+
+
+###### CAMBIAR ESTA LINEA
+#      - /VBOX/DOCKERentorno/docker4drupal/traefik/var/run/docker.sock:/var/run/docker.sock
+
+#x-mutagen:
+#  sync:
+#    defaults:
+#      ignore:
+#        vcs: true
+#        paths:
+#        - .DS_Store
+#        - .history
+#        - .idea
+#    drupal:
+#      alpha: "."
+#      beta: "volume://drdrupal.hl.org
+#      configurationBeta:drupal.hl.org
+#        permissions:
+#          defaultFileMode: 0644
+#          defaultDirectoryMode: 0755
+#          defaultOwner: "id:501"
+#          defaultGroup: "id:20"
+
+#volumes:
+## For macOS users (Mutagen)
+#  drupal:
+## For Xdebug profiler
+#  files:
+
+volumes:
+    drupal-data:
+    db-data:
+    certbot-etc:
+    nginx-data:
+    portainer-data:
+    etc: {}
+
+#networks:
+#  HL_net:
+#  portainer_net:

@@ -1,0 +1,187 @@
+version: '3'
+services:
+
+#*************************************** nginx-proxy ****************************************
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: "${PROJECT_NAME}_nginx-proxy"
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs:ro
+      - vhostd:/etc/nginx/vhost.d
+      - ./www:/usr/share/nginx/html
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+#*************************************** LETSENCRYPT **************************************
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: "${PROJECT_NAME}_letsencrypt"    
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - ./certs:/etc/nginx/certs:rw
+      - vhostd:/etc/nginx/vhost.d
+      - ./www:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+#*************************************** NGINX ********************************************
+  nginx:
+    image: nginx:$NGINX_TAG
+    container_name: "${PROJECT_NAME}_nginx"
+    restart: always
+    expose:
+#    ports:
+      - "80"
+    volumes:
+      - ./www:/usr/share/nginx/html:ro
+    environment:
+      - VIRTUAL_HOST=$PROJECT_BASE_URL
+      - LETSENCRYPT_HOST=$PROJECT_BASE_URL
+      - LETSENCRYPT_EMAIL=$PROJECT_NAME_EMAIL
+    depends_on:
+      - nginx-proxy
+      - letsencrypt
+      
+
+#*************************************** KODI ********************************************
+#   kodi:
+#     image: linuxserver/kodi-headless
+#     container_name: "${PROJECT_NAME}_kodi"
+# #    restart: unless-stopped
+#     environment:
+#       - PGID=1001
+#       - PUID=1000
+#       - TZ=Europe/Madrid
+#     volumes:  
+#       - ./kodi_data:/config/.kodi
+#     ports:
+#       - "8082:8080"
+#       - "9090:9090"
+#       - "9777:9777/udp"
+
+
+#*************************************** PORTAINER ***************************************
+#   portainer:
+#     image: portainer/portainer-ce:latest  #* root:29su771MA-
+#     container_name: "${PROJECT_NAME}_portainer"
+# #    restart: unless-stopped
+#     security_opt:
+#       - no-new-privileges:true
+#     volumes:
+#       - /etc/localtime:/etc/localtime:ro
+#       - /var/run/docker.sock:/var/run/docker.sock:ro
+#       - ./portainer-data:/data
+#     ports:
+#     - 9000:9000
+
+#*************************************** NETDATA *******************************************     
+#   netdata:
+#     image: netdata/netdata
+#     container_name: "${PROJECT_NAME}_netdata"
+#     hostname: rokedegea.eu # set to fqdn of host
+#     ports:
+#         - '19999:19999'
+# #     restart: unless-stopped       
+#     volumes:
+#       - 'netdataconfig:/etc/netdata'
+#       - 'netdatalib:/var/lib/netdata'
+#       - 'netdatacache:/var/cache/netdata'
+#       - '/etc/passwd:/host/etc/passwd:ro'
+#       - '/etc/group:/host/etc/group:ro'
+#       - '/proc:/host/proc:ro'
+#       - '/sys:/host/sys:ro'
+#       - '/etc/os-release:/host/etc/os-release:ro'
+# #     restart: unless-stopped
+#     cap_add:
+#       - SYS_PTRACE
+#     security_opt:
+#       - apparmor:unconfined    
+#     environment:
+#       - NETDATA_CLAIM_TOKEN=uS1Wxq_GBEg6veq6Y6mxGESGkGW2_XmLM6P6VRaSEOJ7r9autNqPh7ueUE31hV_Z21XOr7eVM4RVe0HVihtdgBVZXbtyNTTwZ590hHUxjYpOlTjbhiJeT_rjipOuzwvCRiSby-8
+#       - NETDATA_CLAIM_URL=https://app.netdata.cloud
+#       - NETDATA_CLAIM_ROOMS=    
+
+#*************************************** MARIADB *******************************************     
+  # mariadb:
+  #     image: mariadb:$MARIADB_TAG
+  #     container_name: "${PROJECT_NAME}_mariadb"
+  #     stop_grace_period: 30s
+  #     environment:
+  #         MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+  #         MYSQL_DATABASE: $DB_NAME
+  #         MYSQL_USER: $DB_USER
+  #         MYSQL_PASSWORD: $DB_PASSWORD
+  #     expose:
+  #         - 3306    
+  #     volumes:
+  #         - ./mariadb-init:/docker-entrypoint-initdb.d #! lee al cargar mysql
+  #         - ./db-data:/var/lib/mysql:rw
+
+#*************************************** ADMINER *******************************************     
+#   adminer:
+#       image: adminer:$ADMINER_TAG
+#       container_name: "${PROJECT_NAME}_adminer"
+#       environment:
+#           # For PostgreSQL:
+#           #      ADMINER_DEFAULT_DB_DRIVER: pgsql
+#     #            some_database: mariadb
+#           ADMINER_DEFAULT_SERVER: mariadb                                #* puede que no valga
+#     #            ADMINER_DEFAULT_DB_HOST: $MOODLE_DOCKER_DBHOST            #* puede que no valga
+#     #            ADMINER_DEFAULT_DB_NAME: $DB_NAME                         #* puede que no valga
+#     #            ADMINER_PLUGINS0: 'tables-filter tinymce'
+#     #            ADMINER_PLUGINS: 'login-servers'
+#     #Create a file "/var/www/html/plugins-enabled/login-servers.php"
+#       ports:
+#           - 8100:8080
+# #      networks:
+# #          - Net_HL
+#       labels:
+#           - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+# #         - "traefik.http.routers.${PROJECT_NAME}_adminer.rule=Host(`adminer.${PROJECT_BASE_URL}`)"
+
+#*************************************** REDIS *******************************************     
+#   redis:
+#       image: redis:latest
+#       container_name: "${PROJECT_NAME}_redis-moodle"
+#       restart: unless-stopped
+# #        networks:
+# #            - Net_HL
+
+#*************************************** MOODLE *******************************************     
+#     php:
+#         image: zakery1369/moodle:latest
+#         container_name: "${PROJECT_NAME}_php-moodle"
+#         working_dir: /var/www/html
+#         volumes:
+#             - ./php-fpm/var/log/php-fpm:/var/log/php-fpm
+#             - ./var/www/html:/var/www/html
+#             - ./php-fpm/php.ini-development:/usr/local/etc/php/php.ini-development
+#             - ./php-fpm/php.ini-production:/usr/local/etc/php/php.ini-production
+#             - ./php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+#             - ./php-fpm/php.ini:/usr/local/etc/php/conf.d/php.ini
+#             - ./moodledata:/var/www/moodledata
+#         restart: unless-stopped
+# #        networks:
+# #            - Net_HL
+
+#*****************************************     *******************************************     
+
+
+volumes:
+  certs:
+  html:
+  vhostd:
+  netdataconfig:
+  netdatalib:
+  netdatacache:   
+  db-data:
+  certbot-etc:
+  nginx-data:
+  portainer-data:
+  etc: {}   

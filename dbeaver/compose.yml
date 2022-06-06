@@ -1,0 +1,20 @@
+version: '3.3'
+services:
+    dbeaver:
+        image: gasparfm/dbeaver
+        container_name: dbeaver
+        environment:
+            - DISPLAY=$DISPLAY
+            - popd           
+        volumes:
+            - /dev/shm:/dev/shm:rw
+            - /etc/machine-id:/etc/machine-id:ro
+            - /var/lib/dbus:/var/lib/dbus:ro
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/hosts:/etc/hosts:ro
+            - './user:/home/user'
+            - '$HOME/.ssh:/home/user/sshkeys:ro'
+
+
+

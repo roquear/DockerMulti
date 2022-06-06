@@ -1,0 +1,214 @@
+﻿2022-06-05 13:49:35.211 T:139983241942016  NOTICE: -----------------------------------------------------------------------
+2022-06-05 13:49:35.211 T:139983241942016  NOTICE: Starting Kodi (18.5 Git:20200109-nogitfound). Platform: Linux x86 64-bit
+2022-06-05 13:49:35.211 T:139983241942016  NOTICE: Using Release Kodi x64 build
+2022-06-05 13:49:35.211 T:139983241942016  NOTICE: Kodi compiled 2020-01-09 by GCC 7.4.0 for Linux x86 64-bit version 4.15.18 (266002)
+2022-06-05 13:49:35.211 T:139983241942016  NOTICE: Running on Ubuntu 18.04.3 LTS, kernel: Linux x86 64-bit version 5.18.1-zen1-1-zen
+2022-06-05 13:49:35.213 T:139983241942016  NOTICE: FFmpeg version/source: 4.0.4-Kodi
+2022-06-05 13:49:35.213 T:139983241942016  NOTICE: Host CPU: AMD Ryzen 5 3400G with Radeon Vega Graphics, 8 cores available
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://xbmc/ is mapped to: /usr/share/kodi
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://xbmcbin/ is mapped to: /usr/lib/kodi
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://xbmcbinaddons/ is mapped to: /usr/lib/kodi/addons
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://masterprofile/ is mapped to: /config/.kodi/userdata
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://envhome/ is mapped to: /config
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://home/ is mapped to: /config/.kodi
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://temp/ is mapped to: /config/.kodi/temp
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://logpath/ is mapped to: /config/.kodi/temp
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: The executable running is: /usr/lib/kodi/kodi-x11
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: Local hostname: 771a29ccaa44
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: Log File is located: /config/.kodi/temp/kodi.log
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: -----------------------------------------------------------------------
+2022-06-05 13:49:35.214 T:139983241942016    INFO: loading settings
+2022-06-05 13:49:35.214 T:139983241942016  NOTICE: special://profile/ is mapped to: special://masterprofile/
+2022-06-05 13:49:35.219 T:139983241942016   DEBUG: CSkinSettings: no <skinsettings> tag found
+2022-06-05 13:49:35.219 T:139983241942016  NOTICE: No settings file to load (special://xbmc/system/advancedsettings.xml)
+2022-06-05 13:49:35.219 T:139983241942016  NOTICE: Loaded settings file from special://profile/advancedsettings.xml
+2022-06-05 13:49:35.220 T:139983241942016  NOTICE: Contents of special://profile/advancedsettings.xml are...
+                                            <advancedsettings>
+                                              <!-- 
+                                            #####################################################
+                                            # For more information on the settings available in #
+                                            # this file, refer to the kodi wiki at              #
+                                            # http://kodi.wiki/view/Advancedsettings.xml        #
+                                            #####################################################
+                                            -->
+                                              <videodatabase>
+                                                <type>mysql</type>
+                                                <!-- don't change this value -->
+                                                <host />
+                                                <!-- change this to the IP address of your mysql/mariadb server  -->
+                                                <port>3306</port>
+                                                <!-- change this to the port of your mysql/mariadb server  -->
+                                                <user />
+                                                <!-- change this to the user for your database, not root  -->
+                                                <pass />
+                                                <!-- change this to the password for your database -->
+                                              </videodatabase>
+                                              <musicdatabase>
+                                                <type>mysql</type>
+                                                <!-- don't change this value -->
+                                                <host />
+                                                <!-- change this to the IP address of your mysql/mariadb server  -->
+                                                <port>3306</port>
+                                                <!-- change this to the port of your mysql/mariadb server  -->
+                                                <user />
+                                                <!-- change this to the user for your database, not root  -->
+                                                <pass />
+                                                <!-- change this to the password for your database -->
+                                              </musicdatabase>
+                                              <services>
+                                                <devicename>KODI Server</devicename>
+                                                <esallinterfaces>true</esallinterfaces>
+                                                <!-- don't change this value -->
+                                                <escontinuousdelay>25</escontinuousdelay>
+                                                <esenabled>true</esenabled>
+                                                <!-- don't change this value -->
+                                                <esinitialdelay>750</esinitialdelay>
+                                                <esmaxclients>20</esmaxclients>
+                                                <esport>9777</esport>
+                                                <!-- don't change this value -->
+                                                <esportrange>10</esportrange>
+                                                <upnpannounce>true</upnpannounce>
+                                                <upnprenderer>false</upnprenderer>
+                                                <upnpserver>true</upnpserver>
+                                                <webserver>true</webserver>
+                                                <!-- don't change this value -->
+                                                <webserverpassword>kodi</webserverpassword>
+                                                <webserverport>8080</webserverport>
+                                                <!-- don't change this value -->
+                                                <webserverusername>kodi</webserverusername>
+                                                <webskin>webinterface.default</webskin>
+                                                <zeroconf>true</zeroconf>
+                                              </services>
+                                              <videolibrary>
+                                                <importresumepoint>true</importresumepoint>
+                                                <!-- import previously exported resume point from .nfo files -->
+                                                <importwatchedstate>true</importwatchedstate>
+                                                <!-- import previously exported playdate and playcount from .nfo files -->
+                                                <backgroundupdate>true</backgroundupdate>
+                                                <dateadded>1</dateadded>
+                                                <!-- 0 results in using the current datetime when adding a video;
+                                                                          1 (default) results in prefering to use the files mtime (if it's valid) and only using the file's ctime if the mtime isn't valid;
+                                                                          2 results in using the newer datetime of the file's mtime and ctime -->
+                                              </videolibrary>
+                                              <musiclibrary>
+                                                <backgroundupdate>true</backgroundupdate>
+                                                <!-- don't change this value -->
+                                              </musiclibrary>
+                                              <videoscanner>
+                                                <ignoreerrors>true</ignoreerrors>
+                                                <!-- Set to true to silently ignore errors while scanning videos. This prevents the error dialogue box, so you don't have to keep hitting "yes" to keep scanning.-->
+                                              </videoscanner>
+                                              <splash>false</splash>
+                                              <bginfoloadermaxthreads>2</bginfoloadermaxthreads>
+                                              <myvideos>
+                                                <extractflags>false</extractflags>
+                                                <extractthumb>false</extractthumb>
+                                              </myvideos>
+                                              <lookandfeel>
+                                                <enablerssfeeds>false</enablerssfeeds>
+                                              </lookandfeel>
+                                              <audiooutput>
+                                                <guisoundmode>0</guisoundmode>
+                                                <ac3passthrough>false</ac3passthrough>
+                                                <dtspassthrough>false</dtspassthrough>
+                                                <multichannellpcm>false</multichannellpcm>
+                                                <truehdpassthrough>false</truehdpassthrough>
+                                                <dtshdpassthrough>false</dtshdpassthrough>
+                                                <mode>2</mode>
+                                              </audiooutput>
+                                              <videoscreen>
+                                                <vsync>2</vsync>
+                                              </videoscreen>
+                                              <input>
+                                                <enablemouse>false</enablemouse>
+                                                <remoteaskeyboard>false</remoteaskeyboard>
+                                              </input>
+                                              <general>
+                                                <addonnotifications>false</addonnotifications>
+                                              </general>
+                                              <skinsettings>
+                                                <setting type="bool" name="skin.confluence.FirstTimeRun">false</setting>
+                                              </skinsettings>
+                                            </advancedsettings>
+2022-06-05 13:49:35.220 T:139983241942016 WARNING: VIDEO database configuration is experimental.
+2022-06-05 13:49:35.220 T:139983241942016 WARNING: CSettingsManager: missing version attribute
+2022-06-05 13:49:35.220 T:139983241942016  NOTICE: Default Video Player: VideoPlayer
+2022-06-05 13:49:35.220 T:139983241942016  NOTICE: Default Audio Player: paplayer
+2022-06-05 13:49:35.220 T:139983241942016  NOTICE: Disabled debug logging due to GUI setting. Level 0.
+2022-06-05 13:49:35.220 T:139983241942016  NOTICE: Log level changed to "LOG_LEVEL_NORMAL"
+2022-06-05 11:49:35.222 T:139983241942016  NOTICE: Running database version Addons27
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: audioencoder.kodi.builtin.aac v1.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: audioencoder.kodi.builtin.wma v1.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: game.controller.default v1.0.19 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: game.controller.snes v1.0.18 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.global.audioengine v1.0.1 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.global.filesystem v1.0.2 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.global.general v1.0.3 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.global.gui v5.12.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.global.main v1.0.14 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.global.network v1.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.audiodecoder v2.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.audioencoder v2.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.game v1.1.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.imagedecoder v2.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.inputstream v2.0.8 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.peripheral v1.3.7 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.pvr v5.10.3 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.screensaver v2.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.vfs v2.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.videocodec v1.0.1 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.binary.instance.visualization v2.0.1 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: kodi.resource v1.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.album.universal v3.1.8 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.artists.universal v4.3.8 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.common.allmusic.com v3.2.2 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.common.fanart.tv v3.6.4 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.common.imdb.com v3.2.6 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.common.musicbrainz.org v2.2.4 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.common.theaudiodb.com v2.0.3 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.common.themoviedb.org v3.2.18 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.local v1.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.themoviedb.org v5.2.6 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: metadata.tvshows.themoviedb.org v3.5.14 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: repository.xbmc.org v3.1.6 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: resource.images.weathericons.default v1.1.8 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: resource.language.en_gb v2.0.1 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: resource.uisounds.kodi v1.0.0 installed
+2022-06-05 11:49:35.233 T:139983241942016  NOTICE: ADDON: screensaver.xbmc.builtin.black v1.0.33 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: screensaver.xbmc.builtin.dim v1.0.58 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: script.module.pil v1.1.7 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: script.module.pycryptodome v3.4.3 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: service.xbmc.versioncheck v0.5.23 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: skin.estouchy v2.0.27 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: skin.estuary v2.0.26 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: vfs.libarchive v1.0.5 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: vfs.rar v2.0.8 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: webinterface.default v18.x-2.4.6 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: xbmc.addon v18.5.0 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: xbmc.core v0.1.0 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: xbmc.gui v5.14.0 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: xbmc.json v10.3.0 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: xbmc.metadata v2.1.0 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: xbmc.python v2.26.0 installed
+2022-06-05 11:49:35.234 T:139983241942016  NOTICE: ADDON: xbmc.webinterface v1.0.0 installed
+2022-06-05 11:49:35.249 T:139983241942016  NOTICE: Checking resolution 16
+2022-06-05 11:49:35.270 T:139982704453376  NOTICE: Running database version Addons27
+2022-06-05 11:49:35.270 T:139982704453376  NOTICE: Running database version ViewModes6
+2022-06-05 11:49:35.271 T:139982704453376  NOTICE: Running database version Textures13
+2022-06-05 11:49:35.271 T:139982704453376   ERROR: Unable to create new database
+2022-06-05 11:49:35.271 T:139982704453376   ERROR: Previous line repeats 1 times.
+2022-06-05 11:49:35.271 T:139982704453376  NOTICE: Running database version TV32
+2022-06-05 11:49:35.271 T:139982704453376  NOTICE: Running database version Epg12
+2022-06-05 11:49:35.277 T:139983241942016 WARNING: JSONRPC: Could not parse type "Setting.Details.SettingList"
+2022-06-05 11:49:35.287 T:139983241942016  NOTICE: Register - new keyboard device registered on application->keyboard: Keyboard (0000:0000)
+2022-06-05 11:49:35.287 T:139983241942016  NOTICE: Register - new mouse device registered on application->mouse: Mouse (0000:0000)
+2022-06-05 11:49:35.288 T:139983241942016  NOTICE: Loading player core factory settings from special://xbmc/system/playercorefactory.xml.
+2022-06-05 11:49:35.288 T:139983241942016  NOTICE: Loaded playercorefactory configuration
+2022-06-05 11:49:35.288 T:139983241942016  NOTICE: Loading player core factory settings from special://masterprofile/playercorefactory.xml.
+2022-06-05 11:49:35.288 T:139983241942016  NOTICE: special://masterprofile/playercorefactory.xml does not exist. Skipping.
+2022-06-05 11:49:35.290 T:139983241942016  NOTICE: initialize done
+2022-06-05 11:49:35.291 T:139983241942016  NOTICE: Running the application...
+2022-06-05 11:49:35.291 T:139983241942016  NOTICE: CWebServer[8080]: Started
+2022-06-05 11:49:35.292 T:139982303913728  NOTICE: ES: Starting UDP Event server on port 9777
+2022-06-05 11:49:35.292 T:139982303913728  NOTICE: UDP: Listening on port 9777 (ipv6 : true)
+2022-06-05 11:49:36.242 T:139982791177984 WARNING: CActiveAE::StateMachine - signal: 22 from port: timer not handled for state: 1

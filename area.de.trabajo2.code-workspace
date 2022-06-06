@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "MultiDocker",
+			"path": "MultiDocker"
+		}
+	],
+	"settings": {
+		"todo-tree.tree.scanMode": "workspace",
+		"cSpell.words": [
+			"letsencrypt"
+		],
+		"github.gitProtocol": "ssh"
+	}
+}

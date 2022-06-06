@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "cweijan.vscode-ssh",
+        "Kelvin.vscode-sshfs"
+    ]
+}

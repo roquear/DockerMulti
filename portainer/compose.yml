@@ -1,0 +1,66 @@
+# docker-compose.yml 
+version: '3'
+services:
+
+#************************ PORTAINER ****************************************
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./portainer-data:/data
+    ports:
+      - 9000:9000
+
+#************************** KODI *********************************************
+  # kodi-headless:
+  #   image: linuxserver/kodi-headless  #* user kodi:kodi
+  #   container_name: kodi
+  #   volumes:
+  #     - path
+  #   environment:
+  #     - PGID=1001
+  #     - PUID=1000
+  #     - TZ=timezone
+  #   ports:
+  #     - '8280:8280'
+  #     - '9090:9090'
+  #     - '9777:9777/udp'
+
+#************************** NETDATA *********************************************     
+#   netdata:
+#     image: netdata/netdata
+#     container_name: netdata
+#     hostname: rokedegea.eu # set to fqdn of host
+#     ports:
+#         - '19999:19999'
+# #       restart: unless-stopped       
+#     volumes:
+#       - 'netdataconfig:/etc/netdata'
+#       - 'netdatalib:/var/lib/netdata'
+#       - 'netdatacache:/var/cache/netdata'
+#       - '/etc/passwd:/host/etc/passwd:ro'
+#       - '/etc/group:/host/etc/group:ro'
+#       - '/proc:/host/proc:ro'
+#       - '/sys:/host/sys:ro'
+#       - '/etc/os-release:/host/etc/os-release:ro'
+#     restart: unless-stopped
+#     cap_add:
+#       - SYS_PTRACE
+#     security_opt:
+#       - apparmor:unconfined    
+#     environment:
+#       - NETDATA_CLAIM_TOKEN=uS1Wxq_GBEg6veq6Y6mxGESGkGW2_XmLM6P6VRaSEOJ7r9autNqPh7ueUE31hV_Z21XOr7eVM4RVe0HVihtdgBVZXbtyNTTwZ590hHUxjYpOlTjbhiJeT_rjipOuzwvCRiSby-8
+#       - NETDATA_CLAIM_URL=https://app.netdata.cloud
+#       - NETDATA_CLAIM_ROOMS=    
+      
+# volumes:
+#     netdataconfig:
+#     netdatalib:
+#     netdatacache:      
+
+
